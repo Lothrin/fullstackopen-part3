@@ -71,6 +71,12 @@ const generateId = () => {
             error: 'content missing'
         })
     }
+    if (persons.map(person => person.name).includes(body.name)) {
+        return response.status(400).json({
+            error: 'Name must be unique'
+        });
+    }
+
     const person = {
         name: body.name,
         number: body.number,
