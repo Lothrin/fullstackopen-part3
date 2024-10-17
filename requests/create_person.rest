@@ -1,4 +1,4 @@
-POST http://localhost:3001/api/persons
+POST part3-phonebook-ea.fly.dev/api/persons
 Content-Type: application/json
 
 {

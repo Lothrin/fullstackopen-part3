@@ -1,1 +1,1 @@
-DELETE http://localhost:3001/api/persons/2
+DELETE part3-phonebook-ea.fly.dev/api/persons/5
