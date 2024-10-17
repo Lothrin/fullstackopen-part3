@@ -2,6 +2,6 @@ POST part3-phonebook-ea.fly.dev/api/persons
 Content-Type: application/json
 
 {
-    "name": "Erkam Arafat",
+    "name": "Mark Mustermann",
     "number": "+43 777 788 8999"
 }
