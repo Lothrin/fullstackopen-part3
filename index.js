@@ -19,10 +19,12 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
+  Person.find({}).then(persons => {
     const date = new Date().toString(); 
     response.send(`
         <p>Phonebook has info for ${persons.length} people</p> <p>${date}</p>
         `)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
