@@ -11,28 +11,6 @@ morgan.token('req-body', (req) => JSON.stringify(req.body));
 app.use(express.static('dist'))
 
 
-let persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
@@ -61,22 +39,47 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-  app.post('/api/persons', (request, response) => {
-    const body = request.body
-  
-    if (!body.name || !body.number) {
-      return response.status(400).json({ error: 'name or number is missing' })
-    }
-  
-    const person = new Person({
-      name: body.name,
-      number: body.number,
+app.post('/api/persons', (request, response, next) => {
+  const body = request.body
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({ error: 'name or number is missing' })
+  }
+
+  const personExists = Person.findOne({ name: body.name })
+
+  if(personExists) {
+    Person.findByIdAndUpdate(personExists._id, { number: body.number }, { new: true})
+    .then(updatedPerson => {
+      response.json(updatedPerson)
     })
-  
-    person.save().then(savedPerson => {
-      response.json(savedPerson)
-    })
+    .catch(error => next(error))
+  }else{
+  const person = new Person({
+    name: body.name,
+    number: body.number,
   })
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
+  .catch(error => next(error))
+}})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
 
   const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
@@ -108,4 +111,28 @@ console.log(`Server running on port ${PORT}`)
 //       : 0
 //     return String(maxId + 1)
 //   }
+
+
+// let persons = [
+//   { 
+//     "id": "1",
+//     "name": "Arto Hellas", 
+//     "number": "040-123456"
+//   },
+//   { 
+//     "id": "2",
+//     "name": "Ada Lovelace", 
+//     "number": "39-44-5323523"
+//   },
+//   { 
+//     "id": "3",
+//     "name": "Dan Abramov", 
+//     "number": "12-43-234345"
+//   },
+//   { 
+//     "id": "4",
+//     "name": "Mary Poppendieck", 
+//     "number": "39-23-6423122"
+//   }
+// ]
 

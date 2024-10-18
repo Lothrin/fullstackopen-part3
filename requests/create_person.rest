@@ -1,7 +1,7 @@
-POST part3-phonebook-ea.fly.dev/api/persons
+POST http://localhost:3001//api/persons
 Content-Type: application/json
 
 {
-    "name": "Mark Mustermann",
+    "name": "Erkam Arafat",
     "number": "+43 777 788 8999"
 }
